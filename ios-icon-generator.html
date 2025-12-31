@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iOS Icon Generator for OpenDeck</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .icon-preview {
+            width: 192px;
+            height: 192px;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .icon-text {
+            font-family: 'PT Serif', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1;
+        }
+        .icon-subtext {
+            font-family: 'PT Serif', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #f97316;
+            margin: 0;
+            line-height: 1;
+        }
+        .instructions {
+            color: #ffffff;
+            max-width: 600px;
+            text-align: center;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #ff914c;
+            transform: scale(1.05);
+        }
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .sizes-list {
+            color: #ccc;
+            text-align: left;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: white;">iOS Icon Generator for OpenDeck</h1>
+    
+    <div class="icon-preview">
+        <p class="icon-text">Open</p>
+        <p class="icon-subtext">Deck</p>
+    </div>
+    
+    <div class="instructions">
+        <p>This tool generates iOS app icons in all required sizes for your PWA. Click the button below to download a ZIP file containing all icon sizes.</p>
+        <p>For iOS PWA support, the following icon sizes are recommended:</p>
+    </div>
+    
+    <div class="sizes-list">
+        <ul>
+            <li>48x48</li>
+            <li>72x72</li>
+            <li>96x96</li>
+            <li>128x128</li>
+            <li>144x144</li>
+            <li>152x152</li>
+            <li>167x167</li>
+            <li>180x180</li>
+            <li>192x192</li>
+            <li>256x256</li>
+            <li>512x512</li>
+        </ul>
+    </div>
+    
+    <button class="btn" onclick="generateIcons()">Generate iOS Icons (ZIP)</button>
+    
+    <canvas id="canvas" style="display: none;"></canvas>
+    
+    <script>
+        function generateIcons() {
+            alert("In a real implementation, this would generate a ZIP file with all required iOS icon sizes. For now, you can manually create these sizes from the SVG logo using a graphics editor.");
+        }
+    </script>
+</body>
+</html>

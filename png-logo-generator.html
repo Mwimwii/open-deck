@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenDeck PNG Logo Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .logo-container {
+            width: 512px;
+            height: 512px;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            border-radius: 20px;
+        }
+        .logo-text {
+            font-family: 'PT Serif', serif;
+            font-size: 128px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1;
+        }
+        .logo-subtext {
+            font-family: 'PT Serif', serif;
+            font-size: 96px;
+            font-weight: 700;
+            color: #f97316;
+            margin: 0;
+            line-height: 1;
+        }
+        .btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #ff914c;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: white;">OpenDeck PNG Logo Generator</h1>
+    
+    <div class="logo-container">
+        <p class="logo-text">Open</p>
+        <p class="logo-subtext">Deck</p>
+    </div>
+    
+    <button class="btn" onclick="downloadLogo()">Download PNG Logo</button>
+    
+    <canvas id="logoCanvas" style="display: none;"></canvas>
+    
+    <script>
+        function downloadLogo() {
+            // Create canvas
+            const canvas = document.getElementById('logoCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = 512;
+            canvas.height = 512;
+            
+            // Draw background
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(0, 0, 512, 512);
+            
+            // Draw text
+            ctx.font = 'bold 128px PT Serif, serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('Open', 256, 200);
+            
+            ctx.font = 'bold 96px PT Serif, serif';
+            ctx.fillStyle = '#f97316';
+            ctx.fillText('Deck', 256, 300);
+            
+            // Convert to blob and download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'logo-512.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+    </script>
+</body>
+</html>

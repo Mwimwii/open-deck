@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenDeck Icon Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .icon-preview {
+            width: 192px;
+            height: 192px;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .icon-text {
+            font-family: 'PT Serif', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1;
+        }
+        .icon-subtext {
+            font-family: 'PT Serif', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #f97316;
+            margin: 0;
+            line-height: 1;
+        }
+        .instructions {
+            color: #ffffff;
+            max-width: 600px;
+            text-align: center;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #ff914c;
+            transform: scale(1.05);
+        }
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: white;">OpenDeck Icon Generator</h1>
+    
+    <div class="icon-preview">
+        <p class="icon-text">Open</p>
+        <p class="icon-subtext">Deck</p>
+    </div>
+    
+    <div class="instructions">
+        <p>This tool helps you create app icons for your PWA. For iOS support, you'll need to generate multiple icon sizes.</p>
+        <p>Click the button below to download the icon. You'll need to resize it to the following sizes for full iOS support:</p>
+        <ul style="text-align: left; color: #ccc;">
+            <li>180x180 (iPhone)</li>
+            <li>167x167 (iPad Pro)</li>
+            <li>152x152 (iPad)</li>
+            <li>120x120 (iPhone SE)</li>
+        </ul>
+        <p>For the best results, use a vector graphics editor to create these sizes from the SVG.</p>
+    </div>
+    
+    <button class="btn" onclick="downloadIcon()">Download Icon (192x192)</button>
+    
+    <canvas id="canvas" style="display: none;"></canvas>
+    
+    <script>
+        function downloadIcon() {
+            // Create canvas
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = 192;
+            canvas.height = 192;
+            
+            // Draw background
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(0, 0, 192, 192);
+            
+            // Draw text
+            ctx.font = 'bold 48px PT Serif, serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('Open', 96, 76);
+            
+            ctx.font = 'bold 36px PT Serif, serif';
+            ctx.fillStyle = '#f97316';
+            ctx.fillText('Deck', 96, 116);
+            
+            // Convert to blob and download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'opendeck-icon-192.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+    </script>
+</body>
+</html>

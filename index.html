@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f97316">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="OpenDeck">
+    <link rel="apple-touch-icon" href="/logo.svg">
+    <link rel="manifest" href="/manifest.json">
+    <title>Open Deck</title>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'PT Serif', serif;
+            background: #d9d9d9;
+            color: #000000;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            padding-top: constant(safe-area-inset-top);
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-stack {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .card {
+            position: absolute;
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            max-height: 700px;
+            background: #f7f7f7;
+            border: 8px solid;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+            transform-origin: center;
+            touch-action: none;
+            will-change: transform, filter, opacity;
+            transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+        }
+        @media (max-width: 767px) {
+            .card {
+                border-radius: 0;
+            }
+        }
+        /* Card border colors based on category with new colors */
+        .card-white { border-color: #b8b8b8; font-weight: 600; }
+        .card-mustard { border-color: #febd59; font-weight: 600; }
+        .card-orange { border-color: #ff914c; font-weight: 600; }
+        .card-blue { border-color: #47a5fd; font-weight: 600; }
+        .card-red { border-color: #ff3131; font-weight: 600; }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            font-family: 'PT Serif', serif;
+            color: #000;
+        }
+        
+        .card-logo {
+            font-family: 'PT Serif', serif;
+            font-size: 3rem;
+            line-height: 1;
+            color: #000;
+            font-weight: 800;
+        }
+
+        .card-logo-sub {
+            font-size: 1rem;
+            color: #555;
+            margin-top: -10px;
+            font-weight: 600;
+        }
+
+        /* Adjusted styles for a better responsive layout */
+        .card-logo-container {
+            margin-bottom: 2rem;
+        }
+
+        .card-category {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #999;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .card-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #000;
+            margin: 0 0 20px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .card-description {
+            font-size: 1.3rem;
+            color: #222;
+            line-height: 1.5;
+            overflow-y: auto;
+            flex-grow: 1; /* Allows the description to take up available space */
+            padding: 0 10px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .card-description::-webkit-scrollbar {
+            width: 8px;
+        }
+        .card-description::-webkit-scrollbar-track {
+            background: #e1e1e1;
+            border-radius: 10px;
+        }
+        .card-description::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .card-description::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        #resetButton, #rulesButton {
+            background: #000;
+            color: #fff;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        #resetButton:hover, #rulesButton:hover {
+            background: #333;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        #rulesModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        #rulesModal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: #d9d9d9;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: #000;
+            cursor: pointer;
+        }
+
+        /* Start screen styles */
+        #startScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            background: #f7f7f7;
+            transition: opacity 0.5s ease-out;
+        }
+        .fade-in {
+            animation: fadeIn .3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Logo image styling */
+        .logo-img {
+            width: 200px;
+            height: auto;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <div id="startScreen">
+            <img src="/logo.jpg" alt="Open Deck Logo" class="logo-img fade-in" id="logoImage">
+            <button id="startButton" class="px-8 py-4 mt-12 rounded-full text-black font-bold text-xl font-bold border-2 border-black transition duration-150 ease-in-out transform hover:scale-105">
+                Start Game
+            </button>
+            <button id="rulesButton" class="px-6 my-3 rounded-full text-lg font-bold text-white bg-black border-2 border-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                Rules
+            </button>
+        </div>
+        <div id="rulesModal">
+            <div class="modal-content">
+                <span class="close-button" id="closeButton">×</span>
+                <h2 class="text-2xl font-bold text-center mb-4">Open Deck Rules</h2>
+                <p class="mb-4">This isn’t just a game, it’s an open invitation. Open Deck is your icebreaker, your conversation starter, your way in. So take a turn, take a breath, and take a chance.</p>
+                <h3 class="font-bold text-xl mb-2">Setup:</h3>
+                <ul class="list-disc list-inside mb-4 space-y-2">
+                    <li>Gather your group (recommended 5 or more players).</li>
+                    <li>Take turns drawing and following instructions found on the cards.</li>
+                </ul>
+                <h3 class="font-bold text-xl mb-2">Gameplay:</h3>
+                <ul class="list-disc list-inside mb-4 space-y-2">
+                    <li>The first player draws a card to start the game.</li>
+                    <li>Players take turns reading and following the instructions.</li>
+                    <li>Play continues either clockwise or counter clockwise.</li>
+                </ul>
+                <p class="text-center italic mt-4">Let's Open Up</p>
+            </div>
+        </div>
+        <div id="gameContainer" class="flex flex-col items-center justify-center lg:p-4 w-full h-full" style="display: none;">
+            <div id="cardStack" class="card-stack">
+            </div>
+            <div class="hidden flex mt-8 space-x-4">
+                <button id="rulesButton" class="px-6 py-3 rounded-full text-lg font-bold text-white bg-black border-2 border-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                    Rules
+                </button>
+                <button id="resetButton" class="px-6 py-3 rounded-full text-lg font-bold text-white bg-black border-2 border-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                    Restart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+    <script>
+        // Fix for 100vh on mobile Safari
+        function setVhProperty() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        // Listen for window resize and orientation changes
+        window.addEventListener('resize', setVhProperty);
+        window.addEventListener('orientationchange', setVhProperty);
+        
+        // Initial call
+        setVhProperty();
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
