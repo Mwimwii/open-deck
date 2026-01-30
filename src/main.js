@@ -281,7 +281,6 @@ function showThankYouMessage() {
     document.addEventListener('click', function(e){
         const goBackButton = e.target.closest('#goBackButton')
         const startOverButton = e.target.closest('#startOverButton')
-        console.log("Clicked", e.target)
         if (goBackButton){
             // Remove the thank you message
             console.log('Going Back')
