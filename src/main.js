@@ -106,7 +106,7 @@ async function updateDownloadCounter() {
             console.error("Failed to update download counter");
         }
     } catch (error) {
-        console.error("Error updating download counter:", error);
+        console.error("Error updating download counter");
     }
 }
 
@@ -136,7 +136,7 @@ async function fetchDownloadCount() {
             console.error("Failed to fetch download counter");
         }
     } catch (error) {
-        console.error("Error fetching download counter:", error);
+        console.error("Error fetching download counter");
     }
 }
 
@@ -277,29 +277,33 @@ function showThankYouMessage() {
     // Add to the game container
     gameContainer.appendChild(thankYouMessage);
     
-    // Add event listener to the go back button
-    document.getElementById('goBackButton').addEventListener('click', () => {
-        // Remove the thank you message
-        thankYouMessage.remove();
-        // Go back to the start screen
-        gameContainer.style.display = 'none';
-        startScreen.style.display = 'flex';
-        
-        // Animate the start screen appearing
-        animate(startScreen, {
-            opacity: [0, 1],
-            duration: 500,
-            easing: 'easeInOutQuad'
-        });
+    // Add event listener to the document to delegate click action to back and replay button
+    document.addEventListener('click', function(e){
+        const goBackButton = e.target.closest('#goBackButton')
+        const startOverButton = e.target.closest('#startOverButton')
+        if (goBackButton){
+            // Remove the thank you message
+            console.log('Going Back')
+            thankYouMessage.remove();
+
+            // Go back to the start screen
+            gameContainer.style.display = 'none';
+            startScreen.style.display = 'flex';
+            
+            // Animate the start screen appearing
+            animate(startScreen, {
+                opacity: [0, 1],
+                duration: 500,
+                easing: 'easeInOutQuad'
+            });
+        } else if(startOverButton) {
+            // Remove the thank you message
+            thankYouMessage.remove();
+            // Reset and restart the game
+            resetGame();
+        }
     });
     
-    // Add event listener to the start over button
-    document.getElementById('startOverButton').addEventListener('click', () => {
-        // Remove the thank you message
-        thankYouMessage.remove();
-        // Reset and restart the game
-        resetGame();
-    });
 }
 
 // Function to reset and restart the game
@@ -558,31 +562,31 @@ window.addEventListener('offline', () => {
     // Continue working offline
 });
 
-// Handle the beforeinstallprompt event
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the default browser prompt
-    e.preventDefault();
+// // Handle the beforeinstallprompt event
+// window.addEventListener('beforeinstallprompt', (e) => {
+//     // Prevent the default browser prompt
+//     e.preventDefault();
     
-    // Show our custom download button
-    downloadButton.style.display = 'block';
+//     // Show our custom download button
+//     downloadButton.style.display = 'block';
     
-    // When the download button is clicked, show the browser's install prompt
-    downloadButton.addEventListener('click', () => {
-        // Update download counter
-        updateDownloadCounter();
+//     // When the download button is clicked, show the browser's install prompt
+//     downloadButton.addEventListener('click', () => {
+//         // Update download counter
+//         updateDownloadCounter();
         
-        // Show the browser's install prompt
-        e.prompt();
+//         // Show the browser's install prompt
+//         e.prompt();
         
-        // Wait for the user to respond to the prompt
-        e.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-            } else {
-                console.log('User dismissed the install prompt');
-            }
-            // Hide the download button after the prompt is shown
-            downloadButton.style.display = 'none';
-        });
-    });
-});
+//         // Wait for the user to respond to the prompt
+//         e.userChoice.then((choiceResult) => {
+//             if (choiceResult.outcome === 'accepted') {
+//                 console.log('User accepted the install prompt');
+//             } else {
+//                 console.log('User dismissed the install prompt');
+//             }
+//             // Hide the download button after the prompt is shown
+//             downloadButton.style.display = 'none';
+//         });
+//     });
+// });
