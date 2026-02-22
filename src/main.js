@@ -263,16 +263,18 @@ function showThankYouMessage() {
             <h2 class="text-2xl font-bold mb-4 text-black">Thanks for Playing!</h2>
             <p class="mb-6 text-black">You've gone through all the cards. What would you like to do?</p>
             <div class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:space-x-4 justify-center">
-                <button id="goBackButton" class="px-6 py-3 rounded-full text-lg font-bold text-white bg-black border-2 border-black">
-                    Go Back
+                <button id="goBackButton" class="px-6 py-3 rounded-full text-lg font-bold text-white bg-black border-2 border-black cursor-pointer hover:bg-gray-800 transition-all" style="pointer-events: auto;">
+                    Home
                 </button>
-                <button id="startOverButton" class="px-6 py-3 rounded-full text-lg font-bold text-black border-2 border-black">
-                    Start Over
+                <button id="startOverButton" class="px-6 py-3 rounded-full text-lg font-bold text-black bg-white border-2 border-black cursor-pointer hover:bg-gray-100 transition-all" style="pointer-events: auto;">
+                    Play Again
                 </button>
             </div>
         </div>
     `;
-    thankYouMessage.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center', 'z-10', 'bg-black', 'bg-opacity-50');
+    thankYouMessage.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
+    thankYouMessage.style.zIndex = '1000';
+    thankYouMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     
     // Add to the game container
     gameContainer.appendChild(thankYouMessage);
