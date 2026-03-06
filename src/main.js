@@ -1,5 +1,6 @@
 import { animate } from 'animejs';
 import { fetchAndFormatCards, LIVE_CSV_URL } from './data-fetcher.js';
+import { inject } from '@vercel/analytics';
 
 // Array of card data from the PDF
 const cards = [
@@ -524,6 +525,9 @@ startButton.addEventListener('click', startGame);
 
 // Add animation to the logo on the start screen
 window.addEventListener('load', async () => {
+    // Initialize Vercel Analytics
+    inject();
+    
     // Initialize cards from CSV (this is async but we don't need to wait for it)
     initializeCards();
     
